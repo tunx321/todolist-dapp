@@ -6,6 +6,7 @@ contract Todo {
 
     event AddTask(address recipient, uint taskId);
     event CompleteTask(uint taskId, bool completed);
+    event ShowTasks(Task[]);
 
     struct Task {
         uint id;
@@ -19,12 +20,14 @@ contract Todo {
         Users[msg.sender].push(
             Task({id: taskId, body: body, completed: false})
         );
-
+        emit ShowTasks(Users[msg.sender]);
         emit AddTask(msg.sender, taskId);
     }
 
     function getMyTasks() external view returns (Task[] memory) {
+        
         return Users[msg.sender];
+        
     }
 
     function completeTask(uint _taskId) external {

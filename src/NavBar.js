@@ -1,9 +1,8 @@
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 function NavBar({accounts, setAccounts}) {
@@ -35,7 +34,7 @@ function NavBar({accounts, setAccounts}) {
 
           </Nav>
         </Navbar.Collapse>
-        {isConnected ? (<Nav.Link style={{color:"white"}} href="#">Connected</Nav.Link>) : (<Button variant="outline-success" onClick={connectAccount}>Connect</Button>)}
+        {isConnected ? (<Nav.Link style={{color:"white"}} href="#" disabled>Connected</Nav.Link>) : (<Button variant="outline-success" onClick={connectAccount}>Connect</Button>)}
       </Container>
     </Navbar>
 
