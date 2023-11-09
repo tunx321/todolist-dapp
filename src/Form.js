@@ -5,15 +5,63 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert';
 import "./Form.css"
 import Button from 'react-bootstrap/esm/Button';
+import contractABI from "./Todo.json"
+import { ethers } from 'ethers';
+import Todo from './Todo';
+
+
+const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 
 export const TodoForm = ({accounts, setAccounts}) => {
   const isConnected = Boolean(accounts[0])
+  const [tasks, setTasks] = useState([]);
     const [value, setValue] = useState('');
 
     async function handleSubmit(){
-      console.log(value)
-      setValue('')
+      if (window.ethereum){
+        const provider = new ethers.BrowserProvider(window.ethereum)
+        const signer = await provider.getSigner()
+        const contract = new ethers.Contract(
+            contractAddress,
+            contractABI.abi,
+            signer,
+        )
+
+        try {
+            const valueStr = { value }
+            setValue('')
+            const response = await contract.addTask(String(valueStr))
+            console.log("response: ", response)
+            
+        } catch (error) {
+            console.log("erorr: ", error)
+        }
     }
+    }
+
+
+    async function handleGetTasks(){
+      if (window.ethereum){
+        const provider = new ethers.BrowserProvider(window.ethereum)
+        const signer = await provider.getSigner()
+        const contract = new ethers.Contract(
+            contractAddress,
+            contractABI.abi,
+            signer,
+        )
+
+        try {
+          const data = await contract.getMyTasks()
+          console.info('data', ...data)
+          setTasks(data);
+            
+        } catch (error) {
+            console.log("erorr: ", error)
+        }
+    }
+    }
+
+    window.onload = handleGetTasks
   return (
     <div className='form-div'>
       <br /><br />
@@ -24,12 +72,15 @@ export const TodoForm = ({accounts, setAccounts}) => {
         <Form.Control type="text" value={value} onChange={(e) => setValue(e.target.value)} />
         <Button onClick={handleSubmit}>Add task</Button>
       </Form.Group>
-    </Form><ListGroup>
-        <ListGroup.Item>Cras justo odio</ListGroup.Item>
-        <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-        <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-        <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-        <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+    </Form>
+    <ListGroup>
+      {tasks.map(([item, index]) =>{
+        return (<Todo key={index} id={item[0]} body={item[1]} completed={item[2]} />)
+})}
+        
+      
+  
+
       </ListGroup></></>) : (      <Alert variant="danger"  dismissible>
         <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
         <p>
