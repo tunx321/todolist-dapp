@@ -4,9 +4,8 @@ pragma solidity 0.8.20;
 contract Todo {
     uint public taskId;
 
-    event AddTask(address recipient, uint taskId);
+    event AddTask(uint taskId, string body);
     event CompleteTask(uint taskId, bool completed);
-    event ShowTasks(Task[]);
 
     struct Task {
         uint id;
@@ -17,17 +16,16 @@ contract Todo {
     mapping(address => Task[]) private Users;
 
     function addTask(string memory body) external {
+        taskId = Users[msg.sender].length;
         Users[msg.sender].push(
             Task({id: taskId, body: body, completed: false})
         );
-        emit ShowTasks(Users[msg.sender]);
-        emit AddTask(msg.sender, taskId);
+        taskId++;
+        emit AddTask(taskId, body);
     }
 
-    function getMyTasks() external view returns (Task[] memory) {
-        
-        return Users[msg.sender];
-        
+    function getMyTasks(uint idTask) external view returns (uint id, string memory body, bool completed ) {
+        return (Users[msg.sender][idTask].id, Users[msg.sender][idTask].body, Users[msg.sender][idTask].completed);
     }
 
     function completeTask(uint _taskId) external {
