@@ -30,9 +30,28 @@ export const TodoForm = ({accounts, setAccounts}) => {
         )
         try {
       const count = await contract.getTaskCount();
+      
       setTotalTasks(parseInt(count));}
       catch (error){
         console.log(error)
+      }
+    }};
+
+    const handleCompleteTask = async (taskID) => {
+      if (window.ethereum){
+        const provider = new ethers.BrowserProvider(window.ethereum)
+        const signer = await provider.getSigner()
+        const contract = new ethers.Contract(
+            contractAddress,
+            contractABI.abi,
+            signer,
+        )
+        try {
+          const response = await contract.completeTask(taskID);
+          console.log("Completed task response handler",response)
+        }
+          catch (error){
+            console.log(error)
       }
     }};
 
@@ -74,10 +93,15 @@ export const TodoForm = ({accounts, setAccounts}) => {
           let tasks = []
           for (let index = 0; index < totalTasks; index++) {
             const task = await contract.getMyTasks(index)
-           
-            tasks.push(task)
+            console.log(task[0], task[1], task[2])
+            let obj = {
+              id: Number(task[0]),
+              body: task[1],
+              isCompleted: Boolean(task[2]),
+            }
+            tasks.push(obj)
           }
-          
+          console.log(tasks)
           setTasks(tasks);
             
         } catch (error) {
@@ -86,11 +110,12 @@ export const TodoForm = ({accounts, setAccounts}) => {
     }
     }
 
+
+
     useEffect(() =>{
       getCount()
-      console.log("aaa", totalTasks)
+      console.log("Total Tasks", totalTasks)
     })
-
   return (
     <div className='form-div'>
       <br /><br />
@@ -106,9 +131,10 @@ export const TodoForm = ({accounts, setAccounts}) => {
    
     <ListGroup >
    
-       {tasks.map(([_, t]) =>( 
-        <ListGroup.Item style={{margin:"7px 0px"}}>{t}<Button>Done</Button><Button>Delete</Button></ListGroup.Item>
- ))}
+       {tasks.map(({id, body, isCompleted}) =>( 
+        isCompleted ? null : (
+        <ListGroup.Item style={{margin:"7px 0px"}}>{ id }{body}{isCompleted}<Button onClick={() => handleCompleteTask(id)}>Done</Button></ListGroup.Item>)
+ ))} 
          
       
   
