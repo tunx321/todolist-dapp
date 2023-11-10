@@ -9,6 +9,7 @@ Technologies that was used in this project:
 ##  How to Install and Run the Project
 
 If you want to run this project locally(in hardhat localhost) you need to:
+
 1.Compile contract using 
 ```zsh
     npx hardhat compile
