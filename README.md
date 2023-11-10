@@ -33,7 +33,7 @@ If you want to run this project locally(in hardhat localhost) you need to:
 
 ---
 
-If you want to deploy this project to test network:
+### If you want to deploy this project to test network:
 
 1. Create .env with following variables 
 ```
