@@ -22,7 +22,7 @@ function NavBar({accounts, setAccounts}) {
   return (
 <Navbar  data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
       <Container fluid>
-        <Navbar.Brand href="#">Navbar </Navbar.Brand>
+        <Navbar.Brand href="/">ToDoList </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -30,7 +30,7 @@ function NavBar({accounts, setAccounts}) {
             style={{ maxHeight: '100px' }}
             navbarScroll>
         <Nav.Link href="/">Home</Nav.Link>
-        <Nav.Link href="#action1">History</Nav.Link>
+        <Nav.Link href="/history">History</Nav.Link>
           </Nav>
         </Navbar.Collapse>
         {isConnected ? (<Nav.Link style={{color:"white"}} href="#" disabled>Connected</Nav.Link>) : (<Button variant="outline-success" onClick={connectAccount}>Connect</Button>)}
