@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import Form from 'react-bootstrap/Form';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert';
 import "./Form.css"
 import Button from 'react-bootstrap/esm/Button';
 import contractABI from "./Todo.json"
 import { ethers } from 'ethers';
-// import Todo from './Todo';
+import Table from 'react-bootstrap/Table';
+
+
 
 
 const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
@@ -120,16 +121,16 @@ export const TodoForm = ({accounts, setAccounts}) => {
     <div className='form-div'>
       <br /><br />
     {isConnected ? (    
-      <><><Form style={{width: "520px"}}>
+      <><><Form style={{width: "520px", padding: "125px 0 0 0 "}}>
       <Form.Group className="mb-3">
-        <Form.Label>What's plan for Today?</Form.Label>
+        <Form.Label style={{fontSize:"24px"}}>What's plan for Today?</Form.Label>
         <Form.Control type="text" value={value} onChange={(e) => setValue(e.target.value)} />
         <Button onClick={handleSubmit}>Add task</Button>
       </Form.Group>
     </Form>
     <Button style={{margin:"0px 0px 10px 0px"}} onClick={handleGetTasks}>Refresh</Button>
    
-    <ListGroup >
+    {/* <ListGroup >
    
        {tasks.map(({id, body, isCompleted}) =>( 
         isCompleted ? null : (
@@ -139,7 +140,33 @@ export const TodoForm = ({accounts, setAccounts}) => {
       
   
 
-      </ListGroup></></>) : (      <Alert variant="danger"  dismissible>
+      </ListGroup> */
+      <Table style={{width: "720px", margin: "15px"}} striped bordered hover>
+              <thead>
+        <tr>
+          <th>#</th>
+          <th>Task</th>
+          <th></th>
+        </tr>
+      </thead>
+                      {tasks.map(({ id, body, isCompleted }) => (
+                        isCompleted ? null : (
+                            <><tbody>
+                              <tr>
+                                  <td>{id}</td>
+                                  <td>{body}</td>
+                                  <td><Button onClick={() => handleCompleteTask(id)}>Done</Button></td>
+                              </tr>
+                          </tbody></>
+                        )
+                      ))}
+                      
+
+                  </Table>
+      }
+      
+      </></>
+      ) : (      <Alert variant="danger"  dismissible>
         <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
         <p>
           You must be connected through your Metamask wallet

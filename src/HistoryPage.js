@@ -1,13 +1,14 @@
 
 import contractABI from "./Todo.json"
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button'
 import { ethers } from 'ethers';
-import Badge from 'react-bootstrap/Badge';
+
 import {useState, useEffect} from 'react'
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
+import Badge from 'react-bootstrap/Badge';
 import "./Form.css"
 
 const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
@@ -81,15 +82,28 @@ function HistoryPage({accounts, setAccounts}) {
     {isConnected ? (    
            <><Form style={{width: "720px"}}><Button style={{margin: "200px 0 20px 0 "}} variant="secondary" size="lg" onClick={handleGetHistory}>
                   Refresh
-              </Button><ListGroup as="ol" numbered>
+              </Button>
+              <Table striped bordered hover>
+              <thead>
+        <tr>
+          <th>#</th>
+          <th>Task</th>
+          <th>Stage</th>
+        </tr>
+      </thead>
                       {tasks.map(({ id, body, isCompleted }) => (
-
-                          <ListGroup.Item as="li">{body} {isCompleted ? (<Badge bg="success">Completed</Badge>) : (<Badge bg="warning">In porccess</Badge>)}</ListGroup.Item>
+                            <><tbody>
+                              <tr>
+                                  <td>{id}</td>
+                                  <td>{body}</td>
+                                  <td>{isCompleted ? (<Badge bg="success">Completed</Badge>) : (<Badge bg="warning">In porccess</Badge>)}</td>
+                              </tr>
+                          </tbody></>
 
                       ))}
                       
 
-                  </ListGroup></Form></>
+                  </Table></Form></>
   ) 
   : 
   (<Alert variant="danger"  dismissible>
