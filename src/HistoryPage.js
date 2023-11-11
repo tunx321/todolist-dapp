@@ -5,13 +5,15 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button'
 import { ethers } from 'ethers';
 
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
 import "./Form.css"
 
-const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+
+const contractAddress = "0x0921030BEa8F8217C72daB4cE9dedE67713005F8"
+
 
 
 
@@ -19,26 +21,7 @@ function HistoryPage({accounts, setAccounts}) {
 
     const isConnected = Boolean(accounts[0])
     const [tasks, setTasks] = useState([]);
-    const [totalTasks, setTotalTasks] = useState(0);
 
-
-    const getCount = async () => {
-        if (window.ethereum){
-          const provider = new ethers.BrowserProvider(window.ethereum)
-          const signer = await provider.getSigner()
-          const contract = new ethers.Contract(
-              contractAddress,
-              contractABI.abi,
-              signer,
-          )
-          try {
-        const count = await contract.getTaskCount();
-        
-        setTotalTasks(parseInt(count));}
-        catch (error){
-          console.log(error)
-        }
-      }};
 
     async function handleGetHistory(){
         if (window.ethereum){
@@ -52,18 +35,9 @@ function HistoryPage({accounts, setAccounts}) {
   
           try {
             console.log("Call get task")
-            let tasks = []
-            for (let index = 0; index < totalTasks; index++) {
-              const task = await contract.getMyTasks(index)
-              console.log(task[0], task[1], task[2])
-              let obj = {
-                id: Number(task[0]),
-                body: task[1],
-                isCompleted: Boolean(task[2]),
-              }
-              tasks.push(obj)
-            }
-            console.log(tasks)
+           
+            const tasks = await contract.getMyTasks()
+            console.log(...tasks)
             setTasks(tasks);
               
           } catch (error) {
@@ -71,10 +45,7 @@ function HistoryPage({accounts, setAccounts}) {
           }
       }
       }
-      useEffect(() =>{
-        getCount()
-        console.log("Total Tasks", totalTasks)
-      })
+
 
   return (
     <div className="form-div" >
@@ -91,12 +62,12 @@ function HistoryPage({accounts, setAccounts}) {
           <th>Stage</th>
         </tr>
       </thead>
-                      {tasks.map(({ id, body, isCompleted }) => (
+                      {tasks.map(({ id, body, completed}) => (
                             <><tbody>
                               <tr>
-                                  <td>{id}</td>
+                                  <td>{Number(id)}</td>
                                   <td>{body}</td>
-                                  <td>{isCompleted ? (<Badge bg="success">Completed</Badge>) : (<Badge bg="warning">In porccess</Badge>)}</td>
+                                  <td>{completed ? (<Badge bg="success">Completed</Badge>) : (<Badge bg="warning">In porccess</Badge>)}</td>
                               </tr>
                           </tbody></>
 

@@ -10,8 +10,8 @@ import Table from 'react-bootstrap/Table';
 
 
 
+const contractAddress = "0x0921030BEa8F8217C72daB4cE9dedE67713005F8"
 
-const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 
 export const TodoForm = ({accounts, setAccounts}) => {
   const isConnected = Boolean(accounts[0])
@@ -48,6 +48,7 @@ export const TodoForm = ({accounts, setAccounts}) => {
             signer,
         )
         try {
+          console.log("id",taskID)
           const response = await contract.completeTask(taskID);
           console.log("Completed task response handler",response)
         }
@@ -67,6 +68,7 @@ export const TodoForm = ({accounts, setAccounts}) => {
         )
 
         try {
+          
             const valueStr = { value }
             setValue('')
             const response = await contract.addTask(valueStr.value)
@@ -77,6 +79,8 @@ export const TodoForm = ({accounts, setAccounts}) => {
         }
     }
     }
+
+
 
 
     async function handleGetTasks(){
@@ -91,18 +95,9 @@ export const TodoForm = ({accounts, setAccounts}) => {
 
         try {
           console.log("Call get task")
-          let tasks = []
-          for (let index = 0; index < totalTasks; index++) {
-            const task = await contract.getMyTasks(index)
-            console.log(task[0], task[1], task[2])
-            let obj = {
-              id: Number(task[0]),
-              body: task[1],
-              isCompleted: Boolean(task[2]),
-            }
-            tasks.push(obj)
-          }
-          console.log(tasks)
+          
+          const tasks = await contract.getMyTasks()
+          console.log(...tasks)
           setTasks(tasks);
             
         } catch (error) {
@@ -128,7 +123,7 @@ export const TodoForm = ({accounts, setAccounts}) => {
         <Button onClick={handleSubmit}>Add task</Button>
       </Form.Group>
     </Form>
-    <Button style={{margin:"0px 0px 10px 0px"}} onClick={handleGetTasks}>Refresh</Button>
+    <Button style={{margin:"0px 0px 10px 0px", backgroundColor:"#ca3260"}} variant='danger' onClick={handleGetTasks}>Refresh</Button>
    
     {/* <ListGroup >
    
@@ -149,11 +144,11 @@ export const TodoForm = ({accounts, setAccounts}) => {
           <th></th>
         </tr>
       </thead>
-                      {tasks.map(({ id, body, isCompleted }) => (
-                        isCompleted ? null : (
+      {tasks.map(({ id, body, completed }) => (
+                        completed ? null : (
                             <><tbody>
                               <tr>
-                                  <td>{id}</td>
+                                  <td>{Number(id)}</td>
                                   <td>{body}</td>
                                   <td><Button onClick={() => handleCompleteTask(id)}>Done</Button></td>
                               </tr>
