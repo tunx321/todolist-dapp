@@ -68,11 +68,11 @@ function Team() {
           <br></br>
           <Row>
         <Col xs={6} md={4}>
-            <a target="_blank" rel="noopener noreferrer" href='https://www.instagram.com/tungatov13/'>
+            <a target="_blank" rel="noopener noreferrer" href='https://www.instagram.com/aiymdk/'>
           <Image style={{width: "42px"}} src={Instagram} rounded /></a>
         </Col>
         <Col xs={6} md={4}>
-        <a target="_blank" rel="noopener noreferrer" href="https://t.me/tung1xxx"><Image style={{width: "42px"}} src={Telegram} rounded /></a>
+        <a target="_blank" rel="noopener noreferrer" href="https://t.me/aiymdk"><Image style={{width: "42px"}} src={Telegram} rounded /></a>
         </Col>
         <Col xs={6} md={4}>
         <a target="_blank" rel="noopener noreferrer" href="https://www.gmail.com"> <Image style={{width: "42px"}} src={Email} rounded /></a>
