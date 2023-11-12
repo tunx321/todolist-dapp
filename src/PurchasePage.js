@@ -86,7 +86,7 @@ function PurchasePage({accounts, setAccounts}) {
           </Card.Text>
         </Card.Body>
         <ListGroup className="list-group-flush">
-            <ListGroup.Item variant="dark">7 tasks per todo</ListGroup.Item>
+            <ListGroup.Item variant="dark">5 tasks per todo</ListGroup.Item>
             <ListGroup.Item variant="dark"><Button style={{backgroundColor:"#ca3260"}} variant='danger' onClick={() => handlePurchase(1)}>Buy for 0.1 ETH</Button></ListGroup.Item>
           </ListGroup>
           
