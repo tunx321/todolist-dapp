@@ -71,7 +71,6 @@ describe("Status privilege testing", function() {
     await myContractDeployed.connect(addr1).addTask("task6")
     await myContractDeployed.connect(addr1).addTask("task7")
     await expect(myContractDeployed.connect(addr1).addTask("task8")).to.be.revertedWith("You can't add more than 7 tasks, because you are Premium user")
- 
   });
 
 })
