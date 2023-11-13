@@ -20,7 +20,8 @@ describe("Todo", function(){
     it("should complete the task", async function() {
       await myContractDeployed.connect(addr1).addTask("task1")
       await myContractDeployed.connect(addr1).completeTask(Number(0))
-      expect(await myContractDeployed.connect(addr1).getTaskCount()).to.equal(1);
+      const task = await myContractDeployed.connect(addr1).getMyTasks()
+      expect(task[0][2]).to.eq(true); //[[0, "task1", true]]
     })
 
     it("should return the free status", async function() {
@@ -61,7 +62,7 @@ describe("Status privilege testing", function() {
  
   });
 
-  it("should revert because of vip(max 5 tasks) user status", async function(){
+  it("should revert because of premium(max 7 tasks) user status", async function(){
     await myContractDeployed.connect(addr1).purchaseStatus(2)
     await myContractDeployed.connect(addr1).addTask("task1")
     await myContractDeployed.connect(addr1).addTask("task2")
