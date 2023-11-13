@@ -16,8 +16,9 @@ const contractAddress = "0x0921030BEa8F8217C72daB4cE9dedE67713005F8"
 export const TodoForm = ({accounts, setAccounts}) => {
   const isConnected = Boolean(accounts[0])
   const [tasks, setTasks] = useState([]);
-    const [value, setValue] = useState('');
-    const [totalTasks, setTotalTasks] = useState(0);
+  const [value, setValue] = useState('');
+  const [totalTasks, setTotalTasks] = useState(0);
+  const [customError, setCustomError] = useState('');
 
 
     const getCount = async () => {
@@ -75,7 +76,9 @@ export const TodoForm = ({accounts, setAccounts}) => {
             console.log("response: ", response)
             
         } catch (error) {
-            console.log("erorr: ", error)
+            const decodedError = contract.interface.parseError(error.data)
+            setCustomError(decodedError.args[0])
+            console.log("custom erorr : ", error)
         }
     }
     }
@@ -125,17 +128,7 @@ export const TodoForm = ({accounts, setAccounts}) => {
     </Form>
     <Button style={{margin:"0px 0px 10px 0px", backgroundColor:"#ca3260"}} variant='danger' onClick={handleGetTasks}>Refresh</Button>
    
-    {/* <ListGroup >
-   
-       {tasks.map(({id, body, isCompleted}) =>( 
-        isCompleted ? null : (
-        <ListGroup.Item style={{margin:"7px 0px"}}>{ id }{body}{isCompleted}<Button onClick={() => handleCompleteTask(id)}>Done</Button></ListGroup.Item>)
- ))} 
-         
-      
-  
-
-      </ListGroup> */
+    {
       <Table style={{width: "720px", margin: "15px"}} striped bordered hover>
               <thead>
         <tr>
@@ -159,7 +152,10 @@ export const TodoForm = ({accounts, setAccounts}) => {
 
                   </Table>
       }
-      
+      {customError ? (<Alert key="danger" variant="danger">
+          {customError}
+        </Alert>):null
+              }
       </></>
       ) : (      <Alert variant="danger"  dismissible>
         <Alert.Heading>Oh snap! You got an error!</Alert.Heading>

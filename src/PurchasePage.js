@@ -8,6 +8,7 @@ import CardGroup from 'react-bootstrap/CardGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert'
 import "./Form.css"
+import { useState } from "react";
 
 
 
@@ -18,7 +19,7 @@ const contractAddress = "0x0921030BEa8F8217C72daB4cE9dedE67713005F8"
 function PurchasePage({accounts, setAccounts}) {
 
     const isConnected = Boolean(accounts[0])
-
+    const [customError, setCustomError] = useState('');
 
 
     const handlePurchase = async (status) => {
@@ -42,6 +43,8 @@ function PurchasePage({accounts, setAccounts}) {
               console.log("response: ", response)
               
           } catch (error) {
+              const decodedError = contract.interface.parseError(error.data)
+              setCustomError(decodedError.args[0])
               console.log("erorr: ", error)
           }
       }
@@ -109,7 +112,11 @@ function PurchasePage({accounts, setAccounts}) {
             <ListGroup.Item variant="dark">7 tasks per todo</ListGroup.Item>
             <ListGroup.Item variant="dark"><Button style={{backgroundColor:"#ca3260"}} variant='danger' onClick={() => handlePurchase(2)}>Buy for 0.3 ETH</Button></ListGroup.Item>
           </ListGroup>
-      </Card></CardGroup></>
+      </Card></CardGroup>
+            {customError ? (<Alert key="danger" variant="danger">
+            {customError}
+          </Alert>):null
+                }</>
   ) 
   : 
   (<Alert variant="danger"  dismissible>
